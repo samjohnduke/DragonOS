@@ -15,14 +15,17 @@
  */
 
 #include "output/graphics/graphics.h"
+#include "output/sound/music.h"
 #include "kernel/event.h"
+#include "game/game.h"
+#include "input/controller.h"
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 int
 main(void)
 {
-
-	//initialise the Operating System
-	//dragon_init();
 	
 	//initialise the graphics
 	graphics_init();
@@ -30,9 +33,35 @@ main(void)
 	//initialise eventedness
 	event_init();
 	
-	//This is the event loop. It should be always spinning. 
-	while(1) {
+	//controller initialisation
+	ControllerInit();	
 	
+	TCCR1B |= (1 << WGM12);
+
+	TIMSK1 = (1 << OCIE1A);
+	sei();
+	
+	OCR1A   = 200;
+	
+	TCCR1B |= (1 << CS10);
+	
+	//initialise the users game code
+	setup();
+	
+	//This is the event loop. It should be always spinning. 
+	while(1) {	
+		loop();
+		UpdateBtnState();
+		//SetAuxAll(GetActive());
+		//ToggleAuxLed(7);
 	}
 	
 }
+
+ISR(TIMER1_COMPA_vect)
+{
+	TimerUpdate();
+	DrawScreen();
+	
+}
+

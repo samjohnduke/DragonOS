@@ -12,10 +12,10 @@ AVR_CFLAGS = -DF_CPU=16000000UL -mmcu=atmega328p
 AVR_HFLAGS = -O ihex -R .eeprom
 
 # build the os by linking all the object files together
-dragon: graphics.o event.o run.o
-	avr-gcc -Wall $(PFLAGS) $(AVR_CFLAGS) -o dragon run.o graphics.o event.o
+dragon: graphics.o event.o run.o sound.o game.o controller.o 
+	avr-gcc -Wall $(PFLAGS) $(AVR_CFLAGS) -o dragon run.o graphics.o event.o sound.o game.o controller.o
 	
-run.o: output/graphics/graphics.h kernel/event.h kernel/run.c
+run.o: output/graphics/graphics.h kernel/event.h kernel/run.c game/game.h
 	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o run.o kernel/run.c
 
 graphics.o: output/graphics/graphics.h output/graphics/graphics.c \
@@ -23,10 +23,18 @@ graphics.o: output/graphics/graphics.h output/graphics/graphics.c \
 	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o graphics.o output/graphics/graphics.c
 
 controller.o: input/controller.h input/controller.c arch/atmega328p/buttons.h
-	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_FLAGS) -o controller.o input/controller.c
+	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o controller.o input/controller.c
 	
 event.o: kernel/event.h kernel/event.c
 	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o event.o kernel/event.c
+	
+sound.o: output/sound/music.c output/sound/music.h output/sound/notes.h arch/atmega328p/speaker.h
+	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o sound.o output/sound/music.c
+
+game.o: game/game.c game/game.h input/controller.h
+	avr-gcc -g -c -Wall $(PFLAGS) $(AVR_CFLAGS) -o game.o game/game.c 
+
+
 	
 # Remove everything but the source code	
 .PHONY: clean
@@ -76,7 +84,7 @@ push: tohex
 # 
 # More Test modules will be created as the project becomes more complex
 
-.PHONY: test roar_test screen_test button_test
+.PHONY: test roar_test screen_test button_test system_test
 
 test: roar_test screen_test button_test
 	
@@ -85,6 +93,9 @@ roar_test:
 	@echo 'Sound Test'
 	@echo 'Listen for the sounds'
 	@echo 
+	avr-gcc -g -Wall $(PFLAGS) $(AVR_CFLAGS) -o RoarTest test/sound_test.c output/sound/music.c
+	avr-objcopy $(AVR_HFLAGS) RoarTest RoarTest.hex
+	avrdude -b57600 -patmega328p -cstk500v1 -P/dev/ttyUSB0 -U flash:w:RoarTest.hex
 	
 screen_test:
 	@echo 
@@ -100,12 +111,18 @@ button_test:
 	@echo 'Button Test'
 	@echo 'Push buttons to test'
 	@echo 
-	avr-gcc -g -Wall $(PFLAGS) $(AVR_CFLAGS) -o ButtonTest test/buttons_test.c output/graphics/graphics.c input/controller.c
+	avr-gcc -g -Wall $(PFLAGS) $(AVR_CFLAGS) -o ButtonTest test/buttons_test.c output/graphics/graphics.c input/controller.c kernel/event.c
 	avr-objcopy $(AVR_HFLAGS) ButtonTest ButtonTest.hex
 	avrdude -b57600 -patmega328p -cstk500v1 -P/dev/ttyUSB0 -U flash:w:ButtonTest.hex
 
-
-
+system_test: 
+	@echo
+	@echo 'System Test'
+	@echo 'Does it all work together'
+	@echo 
+	avr-gcc -g -Wall $(PFLAGS) $(AVR_CFLAGS) -o SystemTest test/system_test.c output/sound/music.c output/graphics/graphics.c input/controller.c
+	avr-objcopy $(AVR_HFLAGS) SystemTest SystemTest.hex
+	avrdude -b57600 -patmega328p -cstk500v1 -P/dev/ttyUSB0 -U flash:w:SystemTest.hex
 
 
 

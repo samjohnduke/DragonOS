@@ -43,81 +43,95 @@ void screen_setup(void) {
 	
 }
 
-void screen_draw(Display frame) {
+void screen_draw(Display* frame) {
+	static uint8_t breaker;
+	
+	if(breaker != 15){
+	
+		breaker++;
+		return;
+	}
+	else {
+		breaker++;
+	}
 	
 	uint8_t i;
 
     for (i=0;i<8;i++) {
         
     	SPCR = (1 << SPE) | ( 1 << MSTR );    // enable SPI, master, and set clock rate
-
-        SPDR = frame.AuxLEDs; // set the shift out register
+		
+		SPDR = frame->AuxLEDs; // set the shift out register
         while(!(SPSR & (1<<SPIF))); // wait until complete
-
-		uint8_t rows = 0;
-		if(frame.screen[8*i+7].rgb[0])
-			rows |= 1 << 7;
-		if(frame.screen[8*i+6].rgb[0])
-			rows |= 1 << 6;
-		if(frame.screen[8*i+5].rgb[0])
-			rows |= 1 << 5;
-		if(frame.screen[8*i+4].rgb[0])
-			rows |= 1 << 4;
-		if(frame.screen[8*i+3].rgb[0])
-			rows |= 1 << 3;
-		if(frame.screen[8*i+2].rgb[0])
-			rows |= 1 << 2;
-		if(frame.screen[8*i+1].rgb[0])
-			rows |= 1 << 1;
-		if(frame.screen[8*i].rgb[0])
-			rows |= 1 << 0;
-			
-        SPDR = rows;
-        while(!(SPSR & (1<<SPIF))); 
-	
-		rows = 0;
-		if(frame.screen[8*i+7].rgb[1])
-			rows |= 1 << 7;
-		if(frame.screen[8*i+6].rgb[1])
-			rows |= 1 << 6;
-		if(frame.screen[8*i+5].rgb[1])
-			rows |= 1 << 5;
-		if(frame.screen[8*i+4].rgb[1])
-			rows |= 1 << 4;
-		if(frame.screen[8*i+3].rgb[1])
-			rows |= 1 << 3;
-		if(frame.screen[8*i+2].rgb[1])
-			rows |= 1 << 2;
-		if(frame.screen[8*i+1].rgb[1])
-			rows |= 1 << 1;
-		if(frame.screen[8*i].rgb[1])
-			rows |= 1 << 0;
-			
-        SPDR = rows;
-        while(!(SPSR & (1<<SPIF))); 
-
-		rows = 0;
-
-		if(frame.screen[8*i+7].rgb[2])
-			rows |= 1 << 7;
-		if(frame.screen[8*i+6].rgb[2])
-			rows |= 1 << 6;
-		if(frame.screen[8*i+5].rgb[2])
-			rows |= 1 << 5;
-		if(frame.screen[8*i+4].rgb[2])
-			rows |= 1 << 4;
-		if(frame.screen[8*i+3].rgb[2])
-			rows |= 1 << 3;
-		if(frame.screen[8*i+2].rgb[2])
-			rows |= 1 << 2;
-		if(frame.screen[8*i+1].rgb[2])
-			rows |= 1 << 1;
-		if(frame.screen[8*i].rgb[2])
-			rows |= 1 << 0;
-
-        SPDR = rows;
-        while(!(SPSR & (1<<SPIF))); 
         
+        if(/*frame->Updated*/1) {
+        
+			uint8_t rows = 0;
+			if(frame->screen[8*i+7].rgb[0])
+				rows |= 1 << 7;
+			if(frame->screen[8*i+6].rgb[0])
+				rows |= 1 << 6;
+			if(frame->screen[8*i+5].rgb[0])
+				rows |= 1 << 5;
+			if(frame->screen[8*i+4].rgb[0])
+				rows |= 1 << 4;
+			if(frame->screen[8*i+3].rgb[0])
+				rows |= 1 << 3;
+			if(frame->screen[8*i+2].rgb[0])
+				rows |= 1 << 2;
+			if(frame->screen[8*i+1].rgb[0])
+				rows |= 1 << 1;
+			if(frame->screen[8*i].rgb[0])
+				rows |= 1 << 0;
+			
+		    SPDR = rows;
+		    while(!(SPSR & (1<<SPIF))); 
+	
+			rows = 0;
+			if(frame->screen[8*i+7].rgb[1])
+				rows |= 1 << 7;
+			if(frame->screen[8*i+6].rgb[1])
+				rows |= 1 << 6;
+			if(frame->screen[8*i+5].rgb[1])
+				rows |= 1 << 5;
+			if(frame->screen[8*i+4].rgb[1])
+				rows |= 1 << 4;
+			if(frame->screen[8*i+3].rgb[1])
+				rows |= 1 << 3;
+			if(frame->screen[8*i+2].rgb[1])
+				rows |= 1 << 2;
+			if(frame->screen[8*i+1].rgb[1])
+				rows |= 1 << 1;
+			if(frame->screen[8*i].rgb[1])
+				rows |= 1 << 0;
+			
+		    SPDR = rows;
+		    while(!(SPSR & (1<<SPIF))); 
+
+			rows = 0;
+
+			if(frame->screen[8*i+7].rgb[2])
+				rows |= 1 << 7;
+			if(frame->screen[8*i+6].rgb[2])
+				rows |= 1 << 6;
+			if(frame->screen[8*i+5].rgb[2])
+				rows |= 1 << 5;
+			if(frame->screen[8*i+4].rgb[2])
+				rows |= 1 << 4;
+			if(frame->screen[8*i+3].rgb[2])
+				rows |= 1 << 3;
+			if(frame->screen[8*i+2].rgb[2])
+				rows |= 1 << 2;
+			if(frame->screen[8*i+1].rgb[2])
+				rows |= 1 << 1;
+			if(frame->screen[8*i].rgb[2])
+				rows |= 1 << 0;
+		 	
+		 	SPDR = rows;
+       	 	while(!(SPSR & (1<<SPIF)));
+       	 	 		
+		} //end pixel setup
+      
         SPCR = 0; //turn off spi 
 
 		PORTB |=4;

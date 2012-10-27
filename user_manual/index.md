@@ -1,14 +1,11 @@
 = DragonOS - User Manual
 == How it works and how to build on top of the OS
 
-:= TOC
+Table Of Contents
 
 1. Introduction 
 2. How the manual works
-
-:= End TOC
-
-
+3. Overall Design Description
 
 === 1. Introduction
 
@@ -45,11 +42,44 @@ project have thoroughly enjoyed it. I also program for the web and you can
 find my in development website at samjohnduke.com
 
 
-
 === 2. How to Use the User Manual
 
 ==== Function Reference
 
+Every .c .h combination file has a corisponding markdown file in the user manual
+folder documentation. For now this is just hand written but I would prefer to 
+build this from doxygen later on. 
+
+Each function reference is designed to provide a simple interface to understand 
+what all the components do at a low level. 
+
 ==== Tutorials
 
+Rather than just describing how all the components fit together, the tutorials 
+folder contains a number of short tutorials on how to use the operating system
+to do specific tasks. There are a number of main tutorials limited only by time.
+
+The tutorials include:
+
+1. Flashing Aux lights
+2. Rainbow Screen
+3. Button Bombs
+
+More will be added when I have the time. 
+
 ==== Example Games
+
+For the assignment, I have to create a game. To do this i thought i would 
+actually record the development process so that it is useful for other 
+developers and users creating games on the operating system.
+
+=== 3. Overall Design Description
+
+==== Factors in design
+
+==== Approach to development
+
+==== Statement of Affectiveness
+
+==== Conclusions 
+
