@@ -20,7 +20,6 @@ simple interfaces to the underlying hardware and to constructs suitable to game
 developement. 
 
 A major component to the assignment was the creation of system for threading. 
-This should allow the game. 
 
 ==== About the Meggy Jnr RGB
 

@@ -25,10 +25,10 @@ typedef struct {
 } Display; 
 
 //Setup the system to be able to handle graphics
-void graphics_init();
+void GraphicsInit();
 
 //Set the screen to display all black values
-void clearScreen();
+void ClearScreen();
 
 //Set all the Aux LEDs at the same time via a bit pattern. 
 // eg if all = 01001000 then the 2nd and 5 LEDS turn on

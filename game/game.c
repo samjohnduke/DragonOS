@@ -39,7 +39,8 @@ static uint8_t board[8][8] = {
 static uint8_t speed = 40;
 static uint8_t lives = 4;
 static uint8_t stopped = 0;
-static uint8_t nextLevel = 10;
+static uint8_t nextLevel = 50;
+static uint8_t finished = 0;
 static uint8_t gotoNext = 0;
 uint16_t timer;
 
@@ -59,12 +60,12 @@ void setup()
 	PaintScreen();
 	DrawLives();
 	
-	watchEvent(LEFT, &MoveLeft);
-	watchEvent(RIGHT, &MoveRight);
-	watchEvent(UP, &MoveForward);
-	watchEvent(DOWN, &MoveBackward);
-	watchEvent(A, &NextTick);
-	watchEvent(B, &NextTick);
+	WatchEvent(LEFT, &MoveLeft);
+	WatchEvent(RIGHT, &MoveRight);
+	WatchEvent(UP, &MoveForward);
+	WatchEvent(DOWN, &MoveBackward);
+	WatchEvent(A, &NextTick);
+	WatchEvent(B, &NextTick);
 }
 
 //The Loop function must be defined.
@@ -72,12 +73,18 @@ void loop()
 {
 	if( (TimerTick(500*speed) || gotoNext) && !stopped)
 	{
+		if(speed == 4){
+				finished = 1;
+				stopped = 1;
+		}
+		
 		UpdateScreen();
 		TimerReset();
 		
 		nextLevel--;
 		if(nextLevel == 0)
 		{
+			nextLevel = 50;
 			LevelUp();
 		}
 			
@@ -96,7 +103,7 @@ void MovedByWall()
 		if(p.ypos == 7){
 			
 			if(lives == 0){
-				clearScreen(); 
+				ClearScreen(); 
 				stopped = 1;
 			}
 			else
@@ -118,10 +125,10 @@ void MovedByWall()
 
 void LevelUp()
 {
-	speed = 10;
-	if(speed==5)
+	speed -= 2;
+	if(speed==2)
 	{
-		stopped = 1;
+		stopped = 1;		
 	}
 }
 
@@ -200,6 +207,10 @@ void PaintScreen()
 			{
 				SetPxl(i, j, GREEN);
 			}
+			else if(board[j][i] == 30)
+			{
+				SetPxl(i, j, YELLOW);
+			}
 		}
 	}
 	
@@ -227,7 +238,18 @@ void UpdateScreen()
 		board[i][7] = board[i-1][7];
 	}
 	
-	if(nextLevel == 1) 
+	if(finished == 1)
+	{
+		board[0][0] = 30;
+		board[0][1] = 30;
+		board[0][2] = 30;
+		board[0][3] = 30;
+		board[0][4] = 30;
+		board[0][5] = 30;
+		board[0][6] = 30;
+		board[0][7] = 30;
+	}
+	else if(nextLevel == 1) 
 	{
 		board[0][0] = 20;
 		board[0][1] = 20;
@@ -237,8 +259,6 @@ void UpdateScreen()
 		board[0][5] = 20;
 		board[0][6] = 20;
 		board[0][7] = 20;
-		
-		nextLevel = 10;
 	}
 	else
 	{

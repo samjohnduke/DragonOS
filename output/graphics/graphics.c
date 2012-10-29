@@ -7,10 +7,10 @@
 
 Display frame;
 
-void graphics_init(void)
+void GraphicsInit(void)
 {
 	screen_setup();
-	clearScreen();
+	ClearScreen();
 }
 
 Pxl* GetPxl(int8_t x, int8_t y)
@@ -56,7 +56,7 @@ void DrawScreen()
 	screen_draw(&frame);
 }
 
-void clearScreen()
+void ClearScreen()
 {
 	
 	int i;

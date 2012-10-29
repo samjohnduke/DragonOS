@@ -4,7 +4,7 @@
 uint16_t timer;
 Event* eventList[20];
 
-void event_init(void)
+void EventInit(void)
 {
 	timer = 0;
 }
@@ -31,7 +31,7 @@ void TimerReset()
 	timer = 0;
 }
 
-void registerEvent(uint8_t eventNum)
+void RegisterEvent(uint8_t eventNum)
 {
 	
 	if(1) 
@@ -43,21 +43,17 @@ void registerEvent(uint8_t eventNum)
 		
 		eventList[eventNum] = e;
 	}
-	else
-	{
-		//event number already registered
-	}
 
 }
 
-void triggerEvent(uint8_t eventNum)
+void TriggerEvent(uint8_t eventNum)
 {
 	Event* e = eventList[eventNum];
 	
 	e->functions();
 }
 
-void watchEvent(uint8_t eventNum, void (*function)(void))
+void WatchEvent(uint8_t eventNum, void (*function)(void))
 {
 	Event* e = eventList[eventNum];
 	e->functions = function;

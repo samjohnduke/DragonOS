@@ -28,10 +28,10 @@ main(void)
 {
 	
 	//initialise the graphics
-	graphics_init();
+	GraphicsInit();
 	
 	//initialise eventedness
-	event_init();
+	EventInit();
 	
 	//controller initialisation
 	ControllerInit();	
@@ -52,8 +52,6 @@ main(void)
 	while(1) {	
 		loop();
 		UpdateBtnState();
-		//SetAuxAll(GetActive());
-		//ToggleAuxLed(7);
 	}
 	
 }

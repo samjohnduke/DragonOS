@@ -84,9 +84,9 @@ push: tohex
 # 
 # More Test modules will be created as the project becomes more complex
 
-.PHONY: test roar_test screen_test button_test system_test
+.PHONY: test roar_test screen_test button_test system_test thread_test
 
-test: roar_test screen_test button_test
+test: roar_test screen_test button_test system_test thread_test
 	
 roar_test:
 	@echo 
@@ -124,7 +124,13 @@ system_test:
 	avr-objcopy $(AVR_HFLAGS) SystemTest SystemTest.hex
 	avrdude -b57600 -patmega328p -cstk500v1 -P/dev/ttyUSB0 -U flash:w:SystemTest.hex
 
-
-
+thread_test:
+	@echo
+	@echo 'Thread Test'
+	@echo 'Towards getting threads working'
+	@echo
+	avr-gcc -g -Wall $(PFLAGS) $(AVR_CFLAGS) -o ThreadTest test/thread_test.c output/graphics/graphics.c input/controller.c kernel/event.c kernel/schedule.c kernel/thread.c game/game.c
+	avr-objcopy $(AVR_HFLAGS) ThreadTest ThreadTest.hex
+	avrdude -b57600 -patmega328p -cstk500v1 -P/dev/ttyUSB0 -U flash:w:ThreadTest.hex
 
 

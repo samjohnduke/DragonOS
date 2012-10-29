@@ -1,5 +1,6 @@
 #ifndef KERNEL_EVENT_H
 #define KENREL_EVENT_H
+
 #include <stdint.h>
 
 //What an event is
@@ -13,13 +14,13 @@ typedef struct {
 extern Event* eventList[20]; 
 extern uint16_t timer;
 
-void    event_init();
+void    EventInit();
 uint8_t TimerTick(uint16_t fps);
 void 	TimerReset();
 void 	TimerUpdate();
 
-void 	registerEvent (uint8_t eventNum);
-void 	triggerEvent  (uint8_t eventNum);
-void	watchEvent    (uint8_t eventNum, void (*function)(void));
+void 	RegisterEvent (uint8_t eventNum);
+void 	TriggerEvent  (uint8_t eventNum);
+void	WatchEvent    (uint8_t eventNum, void (*function)(void));
 
 #endif

@@ -13,12 +13,12 @@ void ControllerInit()
 	btnState = 0;
 	btnRelease = 0;
 	
-	registerEvent(UP);
-	registerEvent(DOWN);
-	registerEvent(RIGHT);
-	registerEvent(LEFT);
-	registerEvent(A);
-	registerEvent(B);
+	RegisterEvent(UP);
+	RegisterEvent(DOWN);
+	RegisterEvent(RIGHT);
+	RegisterEvent(LEFT);
+	RegisterEvent(A);
+	RegisterEvent(B);
 }
 
 State GetControllerState(BtnType btn) {
@@ -57,7 +57,7 @@ void UpdateBtnState()
 			
 			btnRelease |= btnMask[i]; //set the button as released
 			
-			triggerEvent(i);		  //call all the functions that are needed 
+			TriggerEvent(i);		  //call all the functions that are needed 
 									  //for this button press
 		}	
 		
