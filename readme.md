@@ -35,6 +35,29 @@ Now the operating system is on the Meggy it is time to get programming.
 I recommend reading the programming guide to get a good handle on using
 DragonOS to make your game.
 	
+Testing
+--------
+
+Being a microcontroller the code it difficult to test. The following commands
+can be used to individually test sub component modules or run the system or
+threading tests
+
+```Bash
+$	make buttons_test
+```	
+```Bash
+$	make screen_test
+```	
+```Bash
+$	make roar_test
+```	
+```Bash
+$	make system_test
+```	
+```Bash
+$	make thread_test
+```	
+	
 License
 -------
 	
