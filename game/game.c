@@ -6,24 +6,27 @@
 
 #include <stdlib.h>
 
+//Define what a player is. 
 typedef struct {
 
-	Color 		c;
-	Color		pcolor;
-	Color		lcolor;
-	uint8_t 	xpos;
-	uint8_t		ypos;
-	uint8_t     vx;
-	uint8_t		vy;
-	uint8_t     acc;
+	Color 		c;			//What color is the player
+	Color		pcolor;		//the color under the player
+	Color		lcolor;		//the color where the player was
+	uint8_t 	xpos;		//x position
+	uint8_t		ypos;		//y position
+	uint8_t     vx;			//velocity in the x direction
+	uint8_t		vy;			//velocity in the y direction
+	uint8_t     acc;		//accelleration in a general direction
 	
-	uint8_t     lastx;
-	uint8_t     lasty;
+	uint8_t     lastx;		//where the player was
+	uint8_t     lasty;		//where the player was
 	
 } Player;
 
 
 static Player p;
+
+//the default board with walls and the player
 static uint8_t board[8][8] = {
 
 	{ 1, 1, 1, 0, 0, 1, 1, 1 },
@@ -35,13 +38,16 @@ static uint8_t board[8][8] = {
 	{ 1, 0, 0, 0, 0, 0, 0, 1 },
 	{ 1, 0, 0, 0, 2, 0, 0, 1 },
 };
-								
+
+					
 static uint8_t speed = 40;
 static uint8_t lives = 4;
 static uint8_t stopped = 0;
 static uint8_t nextLevel = 50;
 static uint8_t finished = 0;
 static uint8_t gotoNext = 0;
+
+//used only for seeding the random generator
 uint16_t timer;
 
 //The Setup function must be defined.
@@ -60,6 +66,7 @@ void setup()
 	PaintScreen();
 	DrawLives();
 	
+	//listen for key presses
 	WatchEvent(LEFT, &MoveLeft);
 	WatchEvent(RIGHT, &MoveRight);
 	WatchEvent(UP, &MoveForward);
@@ -123,6 +130,8 @@ void MovedByWall()
 	}
 }
 
+//increase speed of the game as a form of level
+//up
 void LevelUp()
 {
 	speed -= 2;
@@ -132,6 +141,8 @@ void LevelUp()
 	}
 }
 
+
+//move the player left
 void MoveLeft()
 {
 	if(p.xpos > 0 && (board[p.ypos][p.xpos-1]%10 ==0) )
@@ -143,7 +154,7 @@ void MoveLeft()
 	}	
 }
 		
-
+//move the player right
 void MoveRight()
 {
 	if(p.xpos < 7 && (board[p.ypos][p.xpos+1]%10 ==0) )
@@ -155,6 +166,7 @@ void MoveRight()
 	}
 }
 
+//move the player forward
 void MoveForward()
 {
 	if(p.ypos > 0 && (board[p.ypos-1][p.xpos]%10 ==0) )
@@ -166,6 +178,7 @@ void MoveForward()
 	}	
 }
 
+//move the player backwards
 void MoveBackward()
 {
 	if(p.ypos < 8 && (board[p.ypos+1][p.xpos]%10 ==0) )
@@ -177,12 +190,7 @@ void MoveBackward()
 	}	
 }
 
-void DrawPlayer()
-{
-	//SetPxl(p.lastx, p.lasty, BLACK);
-	//SetPxl(p.xpos, p.ypos, p.c);
-}
-
+//for every pxl in the frame - paint it
 void PaintScreen()
 {
 	uint8_t i,j;
@@ -193,35 +201,36 @@ void PaintScreen()
 		{
 			if(board[j][i] == 0)
 			{
-				SetPxl(i, j, BLACK);
+				SetPxl(i, j, BLACK);	//Empty dot
 			}
 			else if(board[j][i] == 1)
 			{
-				SetPxl(i, j, WHITE);
+				SetPxl(i, j, WHITE);	//A wall
 			}
 			else if(board[j][i] == 2)
 			{
-				SetPxl(i, j, RED);
+				SetPxl(i, j, RED);		//The player
 			}
 			else if(board[j][i] == 20)
 			{
-				SetPxl(i, j, GREEN);
+				SetPxl(i, j, GREEN);	//The next level line
 			}
 			else if(board[j][i] == 30)
 			{
-				SetPxl(i, j, YELLOW);
+				SetPxl(i, j, YELLOW);	// The Final level
 			}
 		}
 	}
 	
 }
 
+//After an update you should repaint the screen
 void repaint()
 {
 	PaintScreen();
-	DrawPlayer();
 }
 
+//After cycle we need to update the screen based on a set of rules.
 void UpdateScreen()
 {
 
@@ -322,6 +331,7 @@ void UpdateScreen()
 	repaint();
 }
 
+//Reset the screen
 void reset()
 {	
 	p.xpos = 4;
@@ -330,6 +340,7 @@ void reset()
 	repaint();
 }
 
+//Use the Aux LEDS as life counters
 void DrawLives()
 {
 	SetAuxAll(0);
@@ -341,6 +352,7 @@ void DrawLives()
 	}
 }
 
+//Speed up the game 
 void NextTick()
 {
 	gotoNext = 1;

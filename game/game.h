@@ -1,13 +1,15 @@
 #ifndef GAME_GAME_H
 #define GAME_GAME_H
 
+//
 //Compulsory Game functions. 
+//
 void setup();
 void loop();
 
-
-//Game Functions
-void DrawPlayer();
+//
+//Game Functions 
+//
 
 void PaintScreen();
 void UpdateScreen();

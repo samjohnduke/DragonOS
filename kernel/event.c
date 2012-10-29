@@ -34,16 +34,12 @@ void TimerReset()
 void RegisterEvent(uint8_t eventNum)
 {
 	
-	if(1) 
-	{
-		Event* e = malloc(sizeof(Event));
-		e->num = eventNum;
-		e->functions = malloc(sizeof(Event)*5);
-		e->numfunctions = 0;
-		
-		eventList[eventNum] = e;
-	}
-
+	Event* e = malloc(sizeof(Event));
+	e->num = eventNum;
+	e->functions = malloc(sizeof(Event)*5);
+	e->numfunctions = 0;
+	
+	eventList[eventNum] = e;
 }
 
 void TriggerEvent(uint8_t eventNum)
